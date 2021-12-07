@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.zup.recargacelular.commons.ValorNaoAceitoException;
 
 @RestController
-@RequestMapping("/novaRecarga")
+@RequestMapping("/nova-recarga")
 public class NovaRecargaController {
 	
 	private final String RECARGA_REALIZADA = "Recarga realizada com sucesso.";
