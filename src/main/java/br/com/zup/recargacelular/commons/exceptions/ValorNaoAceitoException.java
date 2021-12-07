@@ -1,4 +1,4 @@
-package br.com.zup.recargacelular.commons;
+package br.com.zup.recargacelular.commons.exceptions;
 
 import java.math.BigDecimal;
 

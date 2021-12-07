@@ -1,7 +1,5 @@
 package br.com.zup.recargacelular.recarga;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.zup.recargacelular.commons.ValorNaoAceitoException;
+import br.com.zup.recargacelular.commons.exceptions.ValorNaoAceitoException;
 
 @RestController
 @RequestMapping("/nova-recarga")
@@ -26,18 +24,13 @@ public class NovaRecargaController {
 	
 	@PostMapping
 	public ResponseEntity<?> recarregar(@RequestBody @Valid NovaRecargaRequest request) {
-		BigDecimal valor = request.getValor();
-		Operadora operadora = request.getOperadora();
+		var recarga = new Recarga(request);
+
+		ResponseEntity<?> resposta = recargaService.realizarRecarga(recarga);
 		
-		if (!operadora.validarValor(valor)) {
-			throw new ValorNaoAceitoException(valor);
-		}
-		
-		ResponseEntity<?> resposta = recargaService.realizarRecarga(request);
-		
-		return resposta.getStatusCode().equals(HttpStatus.OK) ? 
-				ResponseEntity.ok(new RecargaResponse(request, RECARGA_REALIZADA)) : 
-				ResponseEntity.unprocessableEntity().body(new RecargaResponse(request, RECARGA_NAO_REALIZADA));
+		return resposta.getStatusCode().equals(HttpStatus.OK)
+				? ResponseEntity.ok(recarga.toResponse(RECARGA_REALIZADA))
+				: ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(recarga.toResponse(RECARGA_NAO_REALIZADA));
 	}
 
 }

@@ -1,10 +1,8 @@
-package br.com.zup.recargacelular.commons;
+package br.com.zup.recargacelular.commons.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import org.springframework.web.bind.*;
 
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import java.util.*;
 
 public class ApiErrorResponse {
 	

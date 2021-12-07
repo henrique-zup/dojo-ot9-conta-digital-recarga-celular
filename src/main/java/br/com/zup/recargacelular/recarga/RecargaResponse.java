@@ -18,10 +18,10 @@ public class RecargaResponse {
 	@JsonProperty
 	private String mensagem;
 
-	public RecargaResponse(NovaRecargaRequest request, String mensagem) {
-		this.numeroCelular = request.getNumeroCelular();
-		this.operadora = request.getOperadora();
-		this.valor = request.getValor();
+	public RecargaResponse(Recarga recarga, String mensagem) {
+		this.numeroCelular = recarga.getNumeroCelular();
+		this.operadora = recarga.getOperadora();
+		this.valor = recarga.getValor();
 		this.mensagem = mensagem;
 	}
 
