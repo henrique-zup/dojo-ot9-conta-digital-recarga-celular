@@ -1,14 +1,18 @@
 package br.com.zup.recargacelular.recarga;
 
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.http.*;
 import org.springframework.stereotype.*;
 
 @Service
 public class RecargaService {
-	
-	public ResponseEntity<?> realizarRecarga(Recarga recarga) {
-		Operadora operadora = recarga.getOperadora();
-		ResponseEntity<?> resposta = ResponseEntity.ok().build();
+
+	@Autowired
+	private RecargaRepository repository;
+
+	public ResponseEntity<?> verificarDisponibilidade(Recarga recarga) {
+		var operadora = recarga.getOperadora();
+		var resposta = ResponseEntity.ok().build();
 
 		// Simulação de serviço indisponível
 		switch(operadora) {
@@ -29,7 +33,10 @@ public class RecargaService {
 					resposta = ResponseEntity.internalServerError().build();
 				break;
 		}
-		
+
+		if (resposta.getStatusCode().equals(HttpStatus.OK))
+			repository.save(recarga);
+
 		return resposta;
 	}
 

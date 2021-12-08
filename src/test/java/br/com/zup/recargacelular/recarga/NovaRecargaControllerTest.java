@@ -40,7 +40,7 @@ class NovaRecargaControllerTest {
                 new BigDecimal("10")
         );
 
-        Mockito.when(service.realizarRecarga(Mockito.any())).thenReturn(ResponseEntity.ok().build());
+        Mockito.when(service.verificarDisponibilidade(Mockito.any())).thenReturn(ResponseEntity.ok().build());
 
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -116,7 +116,7 @@ class NovaRecargaControllerTest {
                 new BigDecimal("10")
         );
 
-        Mockito.when(service.realizarRecarga(Mockito.any())).thenReturn(ResponseEntity.internalServerError().build());
+        Mockito.when(service.verificarDisponibilidade(Mockito.any())).thenReturn(ResponseEntity.internalServerError().build());
 
         mockMvc.perform(MockMvcRequestBuilders.post(uri)
                 .contentType(MediaType.APPLICATION_JSON)

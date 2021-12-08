@@ -16,8 +16,8 @@ import br.com.zup.recargacelular.commons.exceptions.ValorNaoAceitoException;
 @RequestMapping("/nova-recarga")
 public class NovaRecargaController {
 	
-	private final String RECARGA_REALIZADA = "Recarga realizada com sucesso.";
-	private final String RECARGA_NAO_REALIZADA = "Não foi possível realizar a recarga.";
+	private final String SERVICO_DISPONIVEL = "A recarga foi encaminhada com sucesso.";
+	private final String SERVICO_INDISPONIVEL = "Serviço indisponível no momento.";
 	
 	@Autowired
 	private RecargaService recargaService;
@@ -26,11 +26,11 @@ public class NovaRecargaController {
 	public ResponseEntity<?> recarregar(@RequestBody @Valid NovaRecargaRequest request) {
 		var recarga = new Recarga(request);
 
-		ResponseEntity<?> resposta = recargaService.realizarRecarga(recarga);
+		var disponibilidadeService = recargaService.verificarDisponibilidade(recarga);
 		
-		return resposta.getStatusCode().equals(HttpStatus.OK)
-				? ResponseEntity.ok(recarga.toResponse(RECARGA_REALIZADA))
-				: ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(recarga.toResponse(RECARGA_NAO_REALIZADA));
+		return disponibilidadeService.getStatusCode().equals(HttpStatus.OK)
+				? ResponseEntity.ok(recarga.toResponse(SERVICO_DISPONIVEL))
+				: ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(recarga.toResponse(SERVICO_INDISPONIVEL));
 	}
 
 }

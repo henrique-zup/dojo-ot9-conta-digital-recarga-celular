@@ -2,13 +2,26 @@ package br.com.zup.recargacelular.recarga;
 
 import br.com.zup.recargacelular.commons.exceptions.*;
 
+import javax.persistence.*;
 import java.math.*;
 
+@Entity
 public class Recarga {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String numeroCelular;
+
+    @Enumerated(EnumType.STRING)
     private Operadora operadora;
+
     private BigDecimal valor;
+
+    private boolean efetuada = false;
+
+    private Recarga() {}
 
     private Recarga(String numeroCelular, Operadora operadora, BigDecimal valor) {
         if (operadora == null)
@@ -40,5 +53,9 @@ public class Recarga {
 
     public BigDecimal getValor() {
         return valor;
+    }
+
+    public void efetuarRecarga() {
+        this.efetuada = true;
     }
 }

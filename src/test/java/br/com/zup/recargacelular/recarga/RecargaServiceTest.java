@@ -3,15 +3,24 @@ package br.com.zup.recargacelular.recarga;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.boot.test.mock.mockito.*;
 import org.springframework.http.*;
 
 import java.math.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class RecargaServiceTest {
 
-    private RecargaService service = new RecargaService();
+    @Autowired
+    private RecargaService service;
+
+    @MockBean
+    private RecargaRepository repository;
 
     @Test
     void deveRetornarResponseEntityOkQuandoServicoDisponivel() {
@@ -21,7 +30,9 @@ class RecargaServiceTest {
                 new BigDecimal("10")
         );
         var recarga = new Recarga(request);
-        var statusCodeResponse = service.realizarRecarga(recarga).getStatusCode();
+
+        Mockito.when(repository.save(Mockito.any(Recarga.class))).thenReturn(Mockito.mock(Recarga.class));
+        var statusCodeResponse = service.verificarDisponibilidade(recarga).getStatusCode();
 
         assertEquals(HttpStatus.OK, statusCodeResponse);
     }
@@ -35,7 +46,7 @@ class RecargaServiceTest {
                 new BigDecimal("10")
         );
         var recarga = new Recarga(request);
-        var statusCodeResponse = service.realizarRecarga(recarga).getStatusCode();
+        var statusCodeResponse = service.verificarDisponibilidade(recarga).getStatusCode();
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, statusCodeResponse);
     }
